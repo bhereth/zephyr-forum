@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Zephyr Phorum — Board Pitch</title>
+  <meta name="description" content="Interactive board pitch for The Zephyr Phorum." />
+
+  <!--
+    Place your logo file next to this HTML and name it:
+      zephyr-phorum-logo.png
+    (or change LOGO_SRC in the script below)
+  -->
+
+  <style>
+    :root{
+      /* Light mode base */
+      --bg:#f6f8fc;
+      --bg2:#eef3fb;
+
+      /* Logo-matched palette (kept) */
+      --zephyr-blue:#3fa9dc;
+      --zephyr-blue-dark:#1f6f9c;
+      --zephyr-green:#5bb75b;
+
+      /* Neutrals */
+      --text:#0b1630;
+      --muted:#4a5a73;
+      --line:rgba(20, 35, 60, .14);
+
+      /* Surfaces */
+      --card:#ffffff;
+      --card2:#f7faff;
+
+      --radius:18px;
+      --shadow: 0 18px 45px rgba(20, 35, 60, .12);
+      --shadow2: 0 10px 25px rgba(20, 35, 60, .10);
+
+      /* Subtle highlight tints */
+      --blueTint: rgba(63,169,220,.14);
+      --greenTint: rgba(91,183,91,.12);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 650px at 12% 12%, var(--blueTint), transparent 60%),
+        radial-gradient(900px 520px at 88% 30%, var(--greenTint), transparent 58%),
+        linear-gradient(180deg, var(--bg), var(--bg2) 70%);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .app{
+      width:min(1050px, 100%);
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:18px;
+    }
+    @media (max-width: 980px){
+      body{padding:14px}
+      .app{grid-template-columns:1fr}
+    }
+
+    .sidebar{
+      background:linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding-bottom:10px;
+      border-bottom:1px solid var(--line);
+    }
+    .logoMark{
+      width:44px;height:44px;border-radius:14px;
+      background:
+        radial-gradient(18px 18px at 30% 35%, rgba(63,169,220,.95), rgba(63,169,220,.12) 70%),
+        radial-gradient(20px 20px at 70% 70%, rgba(91,183,91,.95), rgba(91,183,91,.10) 72%),
+        linear-gradient(135deg, rgba(255,255,255,.85), rgba(255,255,255,0));
+      border:1px solid rgba(20, 35, 60, .12);
+      box-shadow:var(--shadow2);
+      flex:0 0 auto;
+    }
+    .brand h1{
+      margin:0;
+      font-size:18px;
+      line-height:1.15;
+      letter-spacing:.2px;
+      color:var(--text);
+    }
+    .brand p{
+      margin:6px 0 0 0;
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.35;
+    }
+    .tag{
+      margin-top:8px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      font-size:12px;
+      color:var(--muted);
+      background:rgba(255,255,255,.70);
+      border:1px solid var(--line);
+      padding:6px 10px;
+      border-radius:999px;
+      width:fit-content;
+      box-shadow: 0 8px 18px rgba(20,35,60,.06);
+    }
+    .tag b{color:var(--text); font-weight:650}
+
+    .steps{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .stepBtn{
+      width:100%;
+      text-align:left;
+      background:rgba(255,255,255,.65);
+      border:1px solid var(--line);
+      color:var(--text);
+      padding:11px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      transition:transform .08s ease, background .15s ease, border .15s ease, box-shadow .15s ease;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      box-shadow: 0 8px 18px rgba(20,35,60,.06);
+    }
+    .stepBtn:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.85);
+      box-shadow: 0 12px 24px rgba(20,35,60,.10);
+    }
+    .stepBtn[aria-current="true"]{
+      background:linear-gradient(180deg, rgba(63,169,220,.18), rgba(91,183,91,.14));
+      border-color:rgba(63,169,220,.45);
+      box-shadow: 0 14px 30px rgba(31,111,156,.14);
+    }
+    .num{
+      min-width:26px;height:26px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:800;
+      background:rgba(255,255,255,.85);
+      border:1px solid var(--line);
+      margin-top:1px;
+      color:var(--zephyr-blue-dark);
+    }
+    .stepMeta{display:flex; flex-direction:column; gap:2px}
+    .stepTitle{font-weight:750; font-size:13.5px}
+    .stepHint{color:var(--muted); font-size:12px; line-height:1.25}
+
+    .controls{
+      margin-top:auto;
+      display:flex;
+      gap:10px;
+      padding-top:12px;
+      border-top:1px solid var(--line);
+    }
+    .btn{
+      flex:1;
+      background:rgba(255,255,255,.70);
+      border:1px solid var(--line);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:700;
+      transition: background .15s ease, transform .08s ease, border .15s ease, box-shadow .15s ease;
+      box-shadow: 0 8px 18px rgba(20,35,60,.06);
+    }
+    .btn:hover{
+      background:rgba(255,255,255,.90);
+      transform:translateY(-1px);
+      box-shadow: 0 12px 24px rgba(20,35,60,.10);
+    }
+    .btn.primary{
+      background:linear-gradient(90deg, rgba(63,169,220,.92), rgba(91,183,91,.92));
+      border-color:rgba(20,35,60,.10);
+      color:#071221;
+      box-shadow: 0 14px 34px rgba(63,169,220,.18);
+    }
+    .btn.primary:hover{filter:brightness(1.03)}
+
+    .main{
+      background:linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.70));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .progressWrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .progress{
+      flex:1;
+      height:9px;
+      border-radius:999px;
+      background:rgba(20,35,60,.07);
+      border:1px solid var(--line);
+      overflow:hidden;
+    }
+    .bar{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, var(--zephyr-blue), var(--zephyr-green));
+      border-radius:999px;
+      transition:width .25s ease;
+    }
+    .pill{
+      font-size:12px;
+      color:var(--muted);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.70);
+      white-space:nowrap;
+      box-shadow: 0 8px 18px rgba(20,35,60,.06);
+    }
+
+    .slide{ padding:6px 2px 2px; }
+    .slide h2{
+      margin:0 0 6px 0;
+      font-size:30px;
+      letter-spacing:.2px;
+      font-weight:800;
+      color:var(--text);
+    }
+    .slide p{
+      margin:8px 0;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:15.5px;
+    }
+
+    .heroLogo{
+      text-align:center;
+      margin:6px 0 18px;
+    }
+    .heroLogo img{
+      max-width:420px;
+      width:100%;
+      height:auto;
+      border-radius:12px;
+      box-shadow:var(--shadow2);
+      background:#fff;
+      border:1px solid var(--line);
+    }
+
+    .grid{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px 14px 13px;
+      box-shadow: 0 10px 22px rgba(20,35,60,.08);
+    }
+    .card h3{
+      margin:0 0 8px 0;
+      font-size:14px;
+      letter-spacing:.2px;
+      color:var(--text);
+    }
+    .bullets{
+      margin:0;
+      padding-left:18px;
+      color:var(--muted);
+      line-height:1.5;
+      font-size:14.5px;
+    }
+
+    .callout{
+      margin-top:10px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(63,169,220,.32);
+      background:linear-gradient(90deg, rgba(63,169,220,.16), rgba(91,183,91,.14));
+      color:var(--text);
+      line-height:1.45;
+      font-size:14.5px;
+      box-shadow: 0 12px 26px rgba(63,169,220,.10);
+    }
+    .callout b{color:var(--text)}
+
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12px;
+      padding:2px 6px;
+      border-radius:8px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.85);
+      color:var(--text);
+    }
+
+    .footer{
+      margin-top:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding-top:12px;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      font-size:12.5px;
+    }
+
+    /* Persona styling */
+    .personaTop{
+      display:grid;
+      grid-template-columns: 160px 1fr;
+      gap:14px;
+      align-items:start;
+      margin-top:8px;
+    }
+    @media (max-width: 520px){
+      .personaTop{grid-template-columns:1fr}
+    }
+    .personaVisual{
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:10px;
+      box-shadow: 0 10px 22px rgba(20,35,60,.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:140px;
+    }
+    .personaRole{
+      margin:0;
+      color:var(--muted);
+      font-size:14.5px;
+      line-height:1.4;
+    }
+    .needs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:10px;
+    }
+    .chip{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.75);
+      box-shadow: 0 8px 18px rgba(20,35,60,.06);
+      color:var(--text);
+      font-size:13px;
+      font-weight:650;
+    }
+    .dot{
+      width:9px;height:9px;border-radius:999px;
+      background:var(--zephyr-blue);
+      box-shadow:0 6px 14px rgba(63,169,220,.18);
+    }
+    .dot.green{ background:var(--zephyr-green); box-shadow:0 6px 14px rgba(91,183,91,.18); }
+  </style>
+</head>
+
+<body>
+  <div class="app" role="application" aria-label="The Zephyr Phorum board pitch">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logoMark" aria-hidden="true"></div>
+        <div>
+          <h1>The Zephyr Phorum</h1>
+          <p>Board-facing interactive pitch — Discord community + First Friday live meetups.</p>
+          <div class="tag"><b>Tagline:</b> A Modeling Community Space</div>
+        </div>
+      </div>
+
+      <nav class="steps" id="steps" aria-label="Pitch sections"></nav>
+
+      <div class="controls">
+        <button class="btn" id="prevBtn" type="button">← Prev</button>
+        <button class="btn primary" id="nextBtn" type="button">Next →</button>
+      </div>
+      <div class="controls" style="padding-top:0; border-top:0;">
+        <button class="btn" id="presentBtn" type="button" title="Toggle distraction-free mode">Present</button>
+        <button class="btn" id="copyBtn" type="button" title="Copy link to this section">Copy section link</button>
+      </div>
+    </aside>
+
+    <main class="main" id="main">
+      <div class="progressWrap" aria-label="Progress">
+        <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+        <div class="pill" id="pill">Section 1 of 10</div>
+      </div>
+
+      <section class="slide" id="slide" aria-live="polite"></section>
+
+      <div class="footer">
+        <div>
+          Tips: <span class="kbd">←</span>/<span class="kbd">→</span> navigate • <span class="kbd">P</span> present • <span class="kbd">Esc</span> exit
+        </div>
+        <div id="timestamp"></div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const LOGO_SRC = "zephyr-phorum-logo.png"; // change if your filename differs
+
+    // --- Simple inline SVGs for persona slides (keeps file self-contained) ---
+    function svgNewModeler(){
+      return `
+        <svg width="130" height="130" viewBox="0 0 130 130" role="img" aria-label="New modeler illustration" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="rgba(63,169,220,.95)"/>
+              <stop offset="1" stop-color="rgba(91,183,91,.95)"/>
+            </linearGradient>
+          </defs>
+          <rect x="10" y="10" width="110" height="110" rx="22" fill="rgba(255,255,255,.9)" stroke="rgba(20,35,60,.14)"/>
+          <circle cx="52" cy="56" r="16" fill="url(#g1)" opacity=".9"/>
+          <circle cx="80" cy="58" r="12" fill="rgba(63,169,220,.35)"/>
+          <path d="M34 94c10-18 50-18 62 0" fill="none" stroke="rgba(31,111,156,.55)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M30 38h34" stroke="rgba(91,183,91,.55)" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      `;
+    }
+    function svgSmallMPO(){
+      return `
+        <svg width="130" height="130" viewBox="0 0 130 130" role="img" aria-label="Small MPO illustration" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="110" height="110" rx="22" fill="rgba(255,255,255,.9)" stroke="rgba(20,35,60,.14)"/>
+          <rect x="26" y="40" width="32" height="48" rx="8" fill="rgba(63,169,220,.28)" stroke="rgba(20,35,60,.14)"/>
+          <rect x="62" y="30" width="42" height="58" rx="10" fill="rgba(91,183,91,.22)" stroke="rgba(20,35,60,.14)"/>
+          <path d="M28 96h78" stroke="rgba(31,111,156,.45)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M40 52h12M40 64h12M40 76h12" stroke="rgba(31,111,156,.45)" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      `;
+    }
+    function svgSeasoned(){
+      return `
+        <svg width="130" height="130" viewBox="0 0 130 130" role="img" aria-label="Seasoned contributor illustration" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="110" height="110" rx="22" fill="rgba(255,255,255,.9)" stroke="rgba(20,35,60,.14)"/>
+          <circle cx="65" cy="54" r="18" fill="rgba(63,169,220,.30)" stroke="rgba(20,35,60,.14)"/>
+          <path d="M42 96c6-16 40-16 46 0" fill="none" stroke="rgba(91,183,91,.55)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M44 34c10-10 32-10 42 0" fill="none" stroke="rgba(31,111,156,.55)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M34 70h62" stroke="rgba(20,35,60,.12)" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      `;
+    }
+
+    const SECTIONS = [
+      {
+        id: "overview",
+        title: "Overview",
+        hint: "What it is",
+        heading: "The Zephyr Phorum",
+        showLogo: true,
+        lead:
+          "A member-supported online Discord community where modelers support each other year-round, with a live, unstructured virtual meetup the First Friday of every month.",
+        cards: [
+          {
+            title: "What it is",
+            bullets: [
+              "A persistent, peer-led Discord community",
+              "Monthly First Friday virtual meetups",
+              "Low-pressure space for real questions and real help"
+            ]
+          },
+          {
+            title: "What it is not",
+            bullets: [
+              "Not a webinar series",
+              "Not a training program",
+              "Not a content production effort",
+              "Enchances, doesn't replace TMIP listserve"
+            ]
+          }
+        ]
+      },
+
+      {
+        id: "why",
+        title: "Why it matters",
+        hint: "Problem & opportunity",
+        heading: "Why this matters",
+        lead:
+          "The most valuable learning in our field often happens between formal events—when someone needs a quick sanity check, a second brain, or a safe place to ask a “small” question.",
+        cards: [
+          {
+            title: "What members get today",
+            bullets: [
+              "Learning sessions",
+              "Modeling Mobility (MoMo) conferences",
+              "Informal, one-off peer outreach"
+            ]
+          },
+          {
+            title: "What’s missing",
+            bullets: [
+              "A persistent community of practice, not just episodic events",
+              "An online space to continue conversations sparked at learning sessions and conferences",
+              "A low-friction way to ask questions, share experiences, and learn from peers year-round"
+            ]
+          }
+        ],
+        callout:
+          "<b>Alignment with goals:</b> The Zephyr Phorum directly supports Zephyr’s aim to foster a community of practice by extending learning, relationships, and peer support beyond in-person events."
+      },
+
+      {
+        id: "alex",
+        title: "Meet Alex",
+        hint: "The new modeler",
+        type: "persona",
+        persona: {
+          name: "Meet Alex",
+          role: "Early-career modeler, analyst, or graduate student",
+          visual: svgNewModeler(),
+          story:
+            "Alex is smart and motivated—but doesn’t yet have a network. They want a low-pressure way to get connected and ask “basic” questions without feeling like they’re imposing.",
+          needs: [
+            { text: "Safe on-ramp to the community", color: "blue" },
+            { text: "A place where small questions are welcome", color: "green" },
+            { text: "Connections that last beyond a conference", color: "blue" }
+          ]
+        },
+        callout:
+          "<b>We answer this by:</b> making First Friday drop-in and Discord year-round—easy entry, no performance pressure."
+      },
+      {
+        id: "morgan",
+        title: "Meet Morgan",
+        hint: "The small MPO modeler/user",
+        type: "persona",
+        persona: {
+          name: "Meet Morgan",
+          role: "Small MPO modeler, planner, or model user (often a team of one)",
+          visual: svgSmallMPO(),
+          story:
+            "Morgan wears multiple hats and often has no local peer group. Modeling decisions still matter—especially under deadlines—so they need quick advice and sanity checks from people who’ve been there.",
+          needs: [
+            { text: "Trusted peer network outside the agency", color: "green" },
+            { text: "Sanity checks before costly decisions", color: "blue" },
+            { text: "Practical guidance under real constraints", color: "green" }
+          ]
+        },
+        callout:
+          "<b>We answer this by:</b> enabling fast peer support (async + live), without requiring formal presentations or “big asks.”"
+      },
+      {
+        id: "jamie",
+        title: "Meet Jamie",
+        hint: "The seasoned contributor",
+        type: "persona",
+        persona: {
+          name: "Meet Jamie",
+          role: "Experienced practitioner, consultant, or academic",
+          visual: svgSeasoned(),
+          story:
+            "Jamie wants to give back, but doesn’t want a heavy commitment. They’re happy to share experience when it’s natural—especially if it strengthens the field and helps emerging practitioners.",
+          needs: [
+            { text: "Lightweight way to mentor and contribute", color: "blue" },
+            { text: "A receptive, curious audience", color: "green" },
+            { text: "A space that values expertise without performativity", color: "blue" }
+          ]
+        },  
+        callout:
+          "<b>We answer this by:</b> keeping the format unstructured and member-led—contribution can be small, real, and frequent."
+      },
+
+      {
+        id: "how",
+        title: "How it works",
+        hint: "Discord + First Friday",
+        heading: "How it works",
+        lead:
+          "The Phorum is intentionally lightweight: minimal structure, clear norms, and easy entry for busy professionals.",
+        cards: [
+          {
+            title: "Discord (ongoing)",
+            bullets: [
+              "Channels for questions, tools, and sanity checks",
+              "Asynchronous support across time zones",
+              "Member stewards help welcome and keep tone healthy"
+            ]
+          },
+          {
+            title: "First Friday (live)",
+            bullets: [
+              "60 minutes, drop-in/drop-out",
+              "No slides, no recording, no pressure to speak",
+              "One host to welcome + keep it respectful"
+            ]
+          }
+        ],
+        callout:
+          "<b>Design choice:</b> Unstructured on purpose. The value is peer interaction, not production."
+      },
+
+      {
+        id: "access",
+        title: "Membership model",
+        hint: "Open on-ramp, member depth",
+        heading: "Membership & access model",
+        lead:
+          "Access is broad; value deepens with membership. We avoid a “paywalled club” while still making membership meaningful.",
+        cards: [
+          {
+            title: "Non-members (on-ramp)",
+            bullets: [
+              "Attend First Friday live sessions",
+              "See public/read-only channels"
+            ]
+          },
+          {
+            title: "Members (core)",
+            bullets: [
+              "Full Discord participation year-round",
+              "Ask questions anytime and get follow-ups",
+              "Deeper collaboration in a trusted community space"
+            ]
+          }
+        ],
+        callout:
+          "<b>Plain-language framing:</b> If you find value here, membership helps keep the space healthy and thriving."
+      },
+
+      {
+        id: "risk",
+        title: "Governance & risk",
+        hint: "Low-cost, low-risk",
+        heading: "Governance & risk",
+        lead:
+          "This is designed to be low cost, low staff burden, and low reputational risk—with clear access controls and simple community norms.",
+        cards: [
+          {
+            title: "Operational profile",
+            bullets: [
+              "Discord is free; no paid speakers required",
+              "Light-touch moderation (member stewards)",
+              "No recordings; no official positions taken"
+            ]
+          },
+          {
+            title: "Controls",
+            bullets: [
+              "Role-based server access (members vs guests)",
+              "Clear rules: respect, confidentiality, no sales pitches",
+              "Ability to lock channels or remove access instantly"
+            ]
+          }
+        ],
+        callout:
+          "<b>Board comfort:</b> Minimal downside; easy to pause or sunset if it doesn’t deliver."
+      },
+
+      {
+        id: "pilot",
+        title: "Pilot plan",
+        hint: "3–6 months",
+        heading: "Pilot approach",
+        lead:
+          "We recommend launching as a time-limited pilot to learn quickly and keep expectations realistic.",
+        cards: [
+          {
+            title: "Pilot timeline",
+            bullets: [
+              "Soft launch with invited participants",
+              "Run First Friday monthly meetings",
+              "Iterate onboarding and channels based on feedback"
+            ]
+          },
+          {
+            title: "What success looks like",
+            bullets: [
+              "Repeat attendance and steady participation",
+              "Qualitative feedback: “this helped me”",
+              "Evidence of peer support and connections forming"
+            ]
+          }
+        ],
+        callout:
+          "<b>Decision point:</b> After the pilot, continue / adjust / sunset — based on engagement and feedback."
+      },
+
+      {
+        id: "ask",
+        title: "Board ask",
+        hint: "Approval requested",
+        heading: "What we’re asking the Board to approve",
+        lead:
+          "A small green-light to pilot the Zephyr Phorum with minimal cost and a clear exit ramp.",
+        cards: [
+          {
+            title: "Approval requested",
+            bullets: [
+              "Authorize a 3–6 month pilot of the Discord-based Phorum",
+              "Allow light branding as “A Modeling Community Space”",
+              "Support the access model (open First Friday + member depth)"
+            ]
+          },
+          {
+            title: "Commitments",
+            bullets: [
+              "Identify 1–2 volunteer stewards for moderation",
+              "Host First Friday (simple opening/closing facilitation)",
+              "Provide a short pilot report with learnings + recommendation"
+            ]
+          }
+        ],
+        callout:
+          "<b>Bottom line:</b> This strengthens Zephyr’s community role without creating a heavy program."
+      }
+    ];
+
+    const stepsEl = document.getElementById("steps");
+    const slideEl = document.getElementById("slide");
+    const barEl = document.getElementById("bar");
+    const pillEl = document.getElementById("pill");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const presentBtn = document.getElementById("presentBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const timestampEl = document.getElementById("timestamp");
+    const mainEl = document.getElementById("main");
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function renderSidebar(activeIndex){
+      stepsEl.innerHTML = "";
+      SECTIONS.forEach((s, i) => {
+        const btn = document.createElement("button");
+        btn.className = "stepBtn";
+        btn.type = "button";
+        btn.setAttribute("data-index", i);
+        btn.setAttribute("aria-current", i === activeIndex ? "true" : "false");
+        btn.innerHTML = `
+          <div class="num">${i+1}</div>
+          <div class="stepMeta">
+            <div class="stepTitle">${escapeHtml(s.title)}</div>
+            <div class="stepHint">${escapeHtml(s.hint)}</div>
+          </div>
+        `;
+        btn.addEventListener("click", () => goTo(i, true));
+        stepsEl.appendChild(btn);
+      });
+    }
+
+    function renderDefaultSlide(s){
+      const heading = s.heading ?? s.title;
+      const lead = s.lead ?? "";
+
+      return `
+        ${s.showLogo ? `
+          <div class="heroLogo">
+            <img src="${escapeHtml(LOGO_SRC)}" alt="The Zephyr Phorum logo">
+          </div>
+        ` : ``}
+
+        <h2>${escapeHtml(heading)}</h2>
+        ${lead ? `<p>${escapeHtml(lead)}</p>` : ``}
+
+        ${Array.isArray(s.cards) ? `
+          <div class="grid">
+            ${s.cards.map(c => `
+              <div class="card">
+                <h3>${escapeHtml(c.title)}</h3>
+                <ul class="bullets">
+                  ${c.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join("")}
+                </ul>
+              </div>
+            `).join("")}
+          </div>
+        ` : ``}
+
+        ${s.callout ? `<div class="callout">${s.callout}</div>` : ``}
+      `;
+    }
+
+    function renderPersonaSlide(s){
+      const p = s.persona;
+      return `
+        <h2>${escapeHtml(p.name)}</h2>
+        <p class="personaRole">${escapeHtml(p.role)}</p>
+
+        <div class="personaTop">
+          <div class="personaVisual" aria-hidden="true">${p.visual}</div>
+          <div>
+            <p>${escapeHtml(p.story)}</p>
+            <div class="needs" aria-label="Needs">
+              ${p.needs.map(n => `
+                <span class="chip">
+                  <span class="dot ${n.color === "green" ? "green" : ""}" aria-hidden="true"></span>
+                  ${escapeHtml(n.text)}
+                </span>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+
+        ${s.callout ? `<div class="callout">${s.callout}</div>` : ``}
+      `;
+    }
+
+    function renderSlide(index){
+      const s = SECTIONS[index];
+      const type = s.type || "default";
+
+      slideEl.innerHTML = (type === "persona")
+        ? renderPersonaSlide(s)
+        : renderDefaultSlide(s);
+
+      const pct = ((index+1) / SECTIONS.length) * 100;
+      barEl.style.width = pct.toFixed(2) + "%";
+      pillEl.textContent = `Section ${index+1} of ${SECTIONS.length}`;
+
+      prevBtn.disabled = index === 0;
+      nextBtn.disabled = index === SECTIONS.length - 1;
+      prevBtn.style.opacity = prevBtn.disabled ? 0.5 : 1;
+      nextBtn.style.opacity = nextBtn.disabled ? 0.5 : 1;
+
+      const now = new Date();
+      timestampEl.textContent = now.toLocaleString();
+    }
+
+    function setHashFor(index){
+      const id = SECTIONS[index].id;
+      history.replaceState(null, "", `#${encodeURIComponent(id)}`);
+    }
+
+    function indexFromHash(){
+      const raw = decodeURIComponent((location.hash || "").replace("#","")).trim();
+      if(!raw) return 0;
+      const idx = SECTIONS.findIndex(s => s.id === raw);
+      return idx >= 0 ? idx : 0;
+    }
+
+    function goTo(index, updateHash){
+      state.index = Math.max(0, Math.min(SECTIONS.length - 1, index));
+      renderSidebar(state.index);
+      renderSlide(state.index);
+      if(updateHash) setHashFor(state.index);
+    }
+
+    function togglePresent(){
+      if(!document.body.classList.contains("present")){
+        document.body.classList.add("present");
+        document.querySelector(".app").style.gridTemplateColumns = "1fr";
+        document.querySelector(".sidebar").style.display = "none";
+        mainEl.style.minHeight = "80vh";
+        presentBtn.textContent = "Exit";
+      }else{
+        document.body.classList.remove("present");
+        document.querySelector(".app").style.gridTemplateColumns = "";
+        document.querySelector(".sidebar").style.display = "";
+        mainEl.style.minHeight = "";
+        presentBtn.textContent = "Present";
+      }
+    }
+
+    async function copySectionLink(){
+      const url = location.href;
+      try{
+        await navigator.clipboard.writeText(url);
+        copyBtn.textContent = "Copied!";
+        setTimeout(()=> copyBtn.textContent = "Copy section link", 1200);
+      }catch(e){
+        prompt("Copy this link:", url);
+      }
+    }
+
+    const state = { index: 0 };
+
+    // Init
+    renderSidebar(0);
+    state.index = indexFromHash();
+    goTo(state.index, true);
+
+    // Controls
+    prevBtn.addEventListener("click", () => goTo(state.index - 1, true));
+    nextBtn.addEventListener("click", () => goTo(state.index + 1, true));
+    presentBtn.addEventListener("click", togglePresent);
+    copyBtn.addEventListener("click", copySectionLink);
+
+    // Keyboard nav
+    window.addEventListener("keydown", (e) => {
+      if(e.key === "ArrowRight") goTo(state.index + 1, true);
+      if(e.key === "ArrowLeft") goTo(state.index - 1, true);
+      if(e.key.toLowerCase() === "p") togglePresent();
+      if(e.key === "Escape" && document.body.classList.contains("present")) togglePresent();
+    });
+
+    // Hash changes
+    window.addEventListener("hashchange", () => {
+      const idx = indexFromHash();
+      goTo(idx, false);
+    });
+  </script>
+</body>
+</html>

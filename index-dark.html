@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Zephyr Phorum — Board Pitch</title>
+<meta name="description" content="Interactive pitch deck (web) for The Zephyr Phorum." />
+<style>
+:root{
+--bg:#0b1220;
+--card:#0f1a30;
+--card2:#0d162a;
+--text:#eaf0ff;
+--muted:#b8c2e3;
+--line:rgba(255,255,255,.12);
+--accent:#4cc9f0;
+--accent2:#7ae582;
+--warn:#ffd166;
+--shadow: 0 18px 45px rgba(0,0,0,.45);
+--radius: 18px;
+}
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+background:
+radial-gradient(1200px 650px at 10% 10%, rgba(76,201,240,.18), transparent 60%),
+radial-gradient(900px 520px at 90% 30%, rgba(122,229,130,.14), transparent 58%),
+linear-gradient(180deg, var(--bg), #070b14 70%);
+color:var(--text);
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:24px;
+}
+.app{
+width:min(1050px, 100%);
+display:grid;
+grid-template-columns: 360px 1fr;
+gap:18px;
+}
+@media (max-width: 980px){
+.app{grid-template-columns:1fr}
+}
+.sidebar{
+background:linear-gradient(180deg, var(--card), var(--card2));
+border:1px solid var(--line);
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+padding:18px;
+display:flex;
+flex-direction:column;
+gap:14px;
+}
+.brand{
+display:flex;
+gap:12px;
+align-items:flex-start;
+padding-bottom:10px;
+border-bottom:1px solid var(--line);
+}
+.logoMark{
+width:44px;height:44px;border-radius:14px;
+background:
+radial-gradient(18px 18px at 30% 35%, rgba(76,201,240,.95), rgba(76,201,240,.15) 70%),
+radial-gradient(20px 20px at 70% 70%, rgba(122,229,130,.95), rgba(122,229,130,.12) 72%),
+linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,0));
+border:1px solid rgba(255,255,255,.16);
+box-shadow:0 10px 25px rgba(0,0,0,.35);
+}
+.brand h1{
+margin:0;
+font-size:18px;
+line-height:1.15;
+letter-spacing:.2px;
+}
+.brand p{
+margin:6px 0 0 0;
+color:var(--muted);
+font-size:12.5px;
+line-height:1.35;
+}
+.tag{
+margin-top:8px;
+display:inline-flex;
+gap:8px;
+align-items:center;
+font-size:12px;
+color:var(--muted);
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.10);
+padding:6px 10px;
+border-radius:999px;
+width:fit-content;
+}
+.tag b{color:var(--text); font-weight:650}
+.steps{
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+.stepBtn{
+width:100%;
+text-align:left;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.10);
+color:var(--text);
+padding:11px 12px;
+border-radius:14px;
+cursor:pointer;
+transition:transform .08s ease, background .15s ease, border .15s ease;
+display:flex;
+gap:10px;
+align-items:flex-start;
+}
+.stepBtn:hover{transform:translateY(-1px); background:rgba(255,255,255,.055)}
+.stepBtn[aria-current="true"]{
+background:linear-gradient(180deg, rgba(76,201,240,.16), rgba(122,229,130,.11));
+border-color:rgba(76,201,240,.35);
+}
+.num{
+min-width:26px;height:26px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+font-weight:700;
+background:rgba(0,0,0,.25);
+border:1px solid rgba(255,255,255,.14);
+margin-top:1px;
+}
+.stepMeta{display:flex; flex-direction:column; gap:2px}
+.stepTitle{font-weight:700; font-size:13.5px}
+.stepHint{color:var(--muted); font-size:12px; line-height:1.25}
+.controls{
+margin-top:auto;
+display:flex;
+gap:10px;
+padding-top:12px;
+border-top:1px solid var(--line);
+}
+.btn{
+flex:1;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.12);
+color:var(--text);
+padding:10px 12px;
+border-radius:14px;
+cursor:pointer;
+font-weight:650;
+transition: background .15s ease, transform .08s ease, border .15s ease;
+}
+.btn:hover{background:rgba(255,255,255,.075); transform:translateY(-1px)}
+.btn.primary{
+background:linear-gradient(90deg, rgba(76,201,240,.85), rgba(122,229,130,.85));
+border-color:rgba(255,255,255,.20);
+color:#06101f;
+}
+.btn.primary:hover{filter:brightness(1.03)}
+.main{
+background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+border:1px solid var(--line);
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+padding:22px;
+display:flex;
+flex-direction:column;
+gap:14px;
+position:relative;
+overflow:hidden;
+}
+.progressWrap{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:14px;
+}
+.progress{
+flex:1;
+height:9px;
+border-radius:999px;
+background:rgba(255,255,255,.07);
+border:1px solid rgba(255,255,255,.10);
+overflow:hidden;
+}
+.bar{
+height:100%;
+width:0%;
+background:linear-gradient(90deg, var(--accent), var(--accent2));
+border-radius:999px;
+transition:width .25s ease;
+}
+.pill{
+font-size:12px;
+color:var(--muted);
+padding:6px 10px;
+border-radius:999px;
+border:1px solid rgba(255,255,255,.12);
+background:rgba(255,255,255,.05);
+white-space:nowrap;
+}
+.slide{
+padding:6px 2px 2px;
+}
+.slide h2{
+margin:0 0 6px 0;
+font-size:28px;
+letter-spacing:.2px;
+}
+.slide p{
+margin:8px 0;
+color:var(--muted);
+line-height:1.55;
+font-size:15.5px;
+}
+.grid{
+margin-top:10px;
+display:grid;
+grid-template-columns:repeat(2, minmax(0,1fr));
+gap:12px;
+}
+@media (max-width: 980px){
+.grid{grid-template-columns:1fr}
+}
+.card{
+background:rgba(0,0,0,.18);
+border:1px solid rgba(255,255,255,.10);
+border-radius:16px;
+padding:14px 14px 13px;
+}
+.card h3{
+margin:0 0 8px 0;
+font-size:14px;
+letter-spacing:.2px;
+}
+.bullets{
+margin:0;
+padding-left:18px;
+color:var(--muted);
+line-height:1.5;
+font-size:14.5px;
+}
+.callout{
+margin-top:10px;
+padding:12px 14px;
+border-radius:16px;
+border:1px solid rgba(255,255,255,.12);
+background:linear-gradient(90deg, rgba(76,201,240,.12), rgba(122,229,130,.09));
+color:var(--text);
+line-height:1.45;
+font-size:14.5px;
+}
+.callout b{color:#f5fbff}
+.kbd{
+font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+font-size:12px;
+padding:2px 6px;
+border-radius:8px;
+border:1px solid rgba(255,255,255,.18);
+background:rgba(0,0,0,.25);
+color:var(--text);
+}
+.footer{
+margin-top:auto;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding-top:12px;
+border-top:1px solid var(--line);
+color:var(--muted);
+font-size:12.5px;
+}
+a{color:inherit}
+</style>
+</head>
+
+<body>
+<div class="app" role="application" aria-label="The Zephyr Phorum board pitch">
+<aside class="sidebar">
+<div class="brand">
+<div class="logoMark" aria-hidden="true"></div>
+<div>
+<h1>The Zephyr Phorum</h1>
+<p>Board-facing interactive pitch — Discord community + First Friday live meetups.</p>
+<div class="tag"><b>Tagline:</b> A Zephyr Community Space</div>
+</div>
+</div>
+
+<nav class="steps" id="steps" aria-label="Pitch sections"></nav>
+
+<div class="controls">
+<button class="btn" id="prevBtn" type="button">← Prev</button>
+<button class="btn primary" id="nextBtn" type="button">Next →</button>
+</div>
+<div class="controls" style="padding-top:0; border-top:0;">
+<button class="btn" id="presentBtn" type="button" title="Toggle distraction-free mode">Present</button>
+<button class="btn" id="copyBtn" type="button" title="Copy link to this section">Copy section link</button>
+</div>
+</aside>
+
+<main class="main" id="main">
+<div class="progressWrap" aria-label="Progress">
+<div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+<div class="pill" id="pill">Section 1 of 7</div>
+</div>
+
+<section class="slide" id="slide" aria-live="polite"></section>
+
+<div class="footer">
+<div>
+Tips: <span class="kbd">←</span>/<span class="kbd">→</span> navigate • <span class="kbd">P</span> present • <span class="kbd">Esc</span> exit
+</div>
+<div id="timestamp"></div>
+</div>
+</main>
+</div>
+
+<script>
+const SECTIONS = [
+{
+id: "overview",
+title: "What it is",
+hint: "One-sentence definition + concept",
+heading: "The Zephyr Phorum",
+lead:
+"A member-supported online Discord community where modelers support each other year-round, with a live, unstructured virtual meetup every First Friday.",
+cards: [
+{
+title: "Two parts",
+bullets: [
+"Discord server for ongoing peer discussion (asynchronous)",
+"First Friday live meetup as the community heartbeat (drop-in)"
+]
+},
+{
+title: "What it is not",
+bullets: [
+"Not a webinar series",
+"Not a training program",
+"Not a formal “deliverables” initiative"
+]
+}
+],
+callout:
+"<b>Tagline:</b> A Zephyr Community Space — simple, inclusive, and board-safe."
+},
+
+{
+id: "why",
+title: "Why it matters",
+hint: "The problem & the opportunity",
+heading: "Why this matters",
+lead:
+"The most valuable learning in our field often happens between formal events—when someone needs a quick sanity check, a second brain, or a safe place to ask a “small” question.",
+cards: [
+{
+title: "What members get today",
+bullets: [
+"Conferences, webinars, presentations",
+"Occasional 1:1 peer outreach",
+"Ad-hoc listserv / email threads"
+]
+},
+{
+title: "What’s missing",
+bullets: [
+"A consistent place for informal support",
+"Low-pressure cross-organization connection",
+"A community rhythm that compounds over time"
+]
+}
+],
+callout:
+"<b>Outcome:</b> Stronger relationships + faster knowledge sharing, without needing more “content.”"
+},
+
+{
+id: "how",
+title: "How it works",
+hint: "Discord + First Friday mechanics",
+heading: "How it works",
+lead:
+"The Phorum is intentionally lightweight: minimal structure, clear norms, and easy entry for busy professionals.",
+cards: [
+{
+title: "Discord (ongoing)",
+bullets: [
+"Channels for questions, tools, and ‘sanity checks’",
+"Asynchronous support across time zones",
+"Member stewards help welcome and keep tone healthy"
+]
+},
+{
+title: "First Friday (live)",
+bullets: [
+"60 minutes, drop-in/drop-out",
+"No slides, no recording, no pressure to speak",
+"One host to welcome + keep it respectful"
+]
+}
+],
+callout:
+"<b>Design choice:</b> Unstructured on purpose. The value is peer interaction, not production."
+},
+
+{
+id: "access",
+title: "Membership model",
+hint: "Open on-ramp, member depth",
+heading: "Membership & access model",
+lead:
+"Access is broad; value deepens with membership. We avoid a “paywalled club” while still making membership meaningful.",
+cards: [
+{
+title: "Non-members (on-ramp)",
+bullets: [
+"Attend First Friday live sessions",
+"See public announcements and event info",
+"Optionally limited guest channels during events"
+]
+},
+{
+title: "Members (core)",
+bullets: [
+"Full Discord participation year-round",
+"Ask questions anytime and get follow-ups",
+"Deeper collaboration and trusted community space"
+]
+}
+],
+callout:
+"<b>Plain-language framing:</b> If you find value here, membership helps keep the space healthy and thriving."
+},
+
+{
+id: "risk",
+title: "Governance & risk",
+hint: "Low-cost, low-risk, good controls",
+heading: "Governance & risk",
+lead:
+"This is designed to be low cost, low staff burden, and low reputational risk—with clear access controls and simple community norms.",
+cards: [
+{
+title: "Operational profile",
+bullets: [
+"Discord is free; no paid speakers required",
+"Light-touch moderation (member stewards)",
+"No recordings; no official positions taken"
+]
+},
+{
+title: "Controls",
+bullets: [
+"Role-based server access (members vs guests)",
+"Clear rules: respectful tone, confidentiality, no sales pitches",
+"Ability to lock channels or remove access instantly"
+]
+}
+],
+callout:
+"<b>Board comfort:</b> Minimal downside; easy to pause or sunset if it doesn’t deliver."
+},
+
+{
+id: "pilot",
+title: "Pilot plan",
+hint: "3–6 months with decision point",
+heading: "Pilot approach",
+lead:
+"We recommend launching as a time-limited pilot to learn quickly and keep expectations realistic.",
+cards: [
+{
+title: "Pilot timeline",
+bullets: [
+"Soft launch with invited participants",
+"Run First Friday monthly meetings",
+"Iterate channel structure and onboarding based on feedback"
+]
+},
+{
+title: "What success looks like",
+bullets: [
+"Repeat attendance and steady participation",
+"Qualitative feedback: ‘this helped me’",
+"Evidence of peer support and connections forming"
+]
+}
+],
+callout:
+"<b>Decision point:</b> After the pilot, continue / adjust / sunset — based on engagement and feedback."
+},
+
+{
+id: "ask",
+title: "Board ask",
+hint: "The specific approval requested",
+heading: "What we’re asking the Board to approve",
+lead:
+"A small green-light to pilot the Zephyr Phorum with minimal cost and a clear exit ramp.",
+cards: [
+{
+title: "Approval requested",
+bullets: [
+"Authorize a 3–6 month pilot of the Discord-based Phorum",
+"Allow light branding as ‘A Zephyr Community Space’",
+"Support the access model (open First Friday + member depth)"
+]
+},
+{
+title: "Commitments",
+bullets: [
+"Identify 1–2 volunteer stewards for moderation",
+"Host First Friday (simple opening/closing facilitation)",
+"Provide a short pilot report with learnings + recommendation"
+]
+}
+],
+callout:
+"<b>Bottom line:</b> This strengthens Zephyr’s community role without creating a heavy program."
+}
+];
+
+const stepsEl = document.getElementById("steps");
+const slideEl = document.getElementById("slide");
+const barEl = document.getElementById("bar");
+const pillEl = document.getElementById("pill");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const presentBtn = document.getElementById("presentBtn");
+const copyBtn = document.getElementById("copyBtn");
+const timestampEl = document.getElementById("timestamp");
+const mainEl = document.getElementById("main");
+
+function escapeHtml(s){
+return String(s)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+}
+
+function renderSidebar(activeIndex){
+stepsEl.innerHTML = "";
+SECTIONS.forEach((s, i) => {
+const btn = document.createElement("button");
+btn.className = "stepBtn";
+btn.type = "button";
+btn.setAttribute("data-index", i);
+btn.setAttribute("aria-current", i === activeIndex ? "true" : "false");
+btn.innerHTML = `
+<div class="num">${i+1}</div>
+<div class="stepMeta">
+<div class="stepTitle">${escapeHtml(s.title)}</div>
+<div class="stepHint">${escapeHtml(s.hint)}</div>
+</div>
+`;
+btn.addEventListener("click", () => goTo(i, true));
+stepsEl.appendChild(btn);
+});
+}
+
+function renderSlide(index){
+const s = SECTIONS[index];
+slideEl.innerHTML = `
+<h2>${escapeHtml(s.heading)}</h2>
+<p>${escapeHtml(s.lead)}</p>
+
+<div class="grid">
+${s.cards.map(c => `
+<div class="card">
+<h3>${escapeHtml(c.title)}</h3>
+<ul class="bullets">
+${c.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join("")}
+</ul>
+</div>
+`).join("")}
+</div>
+
+<div class="callout">${s.callout}</div>
+`;
+
+const pct = ((index+1) / SECTIONS.length) * 100;
+barEl.style.width = pct.toFixed(2) + "%";
+pillEl.textContent = `Section ${index+1} of ${SECTIONS.length}`;
+prevBtn.disabled = index === 0;
+nextBtn.disabled = index === SECTIONS.length - 1;
+prevBtn.style.opacity = prevBtn.disabled ? 0.5 : 1;
+nextBtn.style.opacity = nextBtn.disabled ? 0.5 : 1;
+
+// timestamp (useful for screenshots/pdfs)
+const now = new Date();
+timestampEl.textContent = now.toLocaleString();
+}
+
+function setHashFor(index){
+const id = SECTIONS[index].id;
+history.replaceState(null, "", `#${encodeURIComponent(id)}`);
+}
+
+function indexFromHash(){
+const raw = decodeURIComponent((location.hash || "").replace("#","")).trim();
+if(!raw) return 0;
+const idx = SECTIONS.findIndex(s => s.id === raw);
+return idx >= 0 ? idx : 0;
+}
+
+function goTo(index, updateHash){
+state.index = Math.max(0, Math.min(SECTIONS.length - 1, index));
+renderSidebar(state.index);
+renderSlide(state.index);
+if(updateHash) setHashFor(state.index);
+// focus main content for screen readers / keyboard flow
+slideEl.focus?.();
+}
+
+function togglePresent(){
+document.body.classList.toggle("present");
+if(document.body.classList.contains("present")){
+// Hide sidebar by switching grid layout
+document.querySelector(".app").style.gridTemplateColumns = "1fr";
+document.querySelector(".sidebar").style.display = "none";
+mainEl.style.minHeight = "80vh";
+presentBtn.textContent = "Exit";
+}else{
+document.querySelector(".app").style.gridTemplateColumns = "";
+document.querySelector(".sidebar").style.display = "";
+mainEl.style.minHeight = "";
+presentBtn.textContent = "Present";
+}
+}
+
+async function copySectionLink(){
+const url = location.href;
+try{
+await navigator.clipboard.writeText(url);
+copyBtn.textContent = "Copied!";
+setTimeout(()=> copyBtn.textContent = "Copy section link", 1200);
+}catch(e){
+// fallback
+prompt("Copy this link:", url);
+}
+}
+
+const state = { index: 0 };
+
+// Build initial UI
+renderSidebar(0);
+
+// Start at hash if present
+state.index = indexFromHash();
+goTo(state.index, true);
+
+// Buttons
+prevBtn.addEventListener("click", () => goTo(state.index - 1, true));
+nextBtn.addEventListener("click", () => goTo(state.index + 1, true));
+presentBtn.addEventListener("click", togglePresent);
+copyBtn.addEventListener("click", copySectionLink);
+
+// Keyboard navigation
+window.addEventListener("keydown", (e) => {
+if(e.key === "ArrowRight") goTo(state.index + 1, true);
+if(e.key === "ArrowLeft") goTo(state.index - 1, true);
+if(e.key.toLowerCase() === "p") togglePresent();
+if(e.key === "Escape" && document.body.classList.contains("present")) togglePresent();
+});
+
+// Respond to manual hash changes
+window.addEventListener("hashchange", () => {
+const idx = indexFromHash();
+goTo(idx, false);
+});
+</script>
+</body>
+</html>
